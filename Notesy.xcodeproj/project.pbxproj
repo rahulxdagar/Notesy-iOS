@@ -6,14 +6,64 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B7792B5A30630A4F00D486AE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7792B5930630A4F00D486AE /* WidgetKit.framework */; };
+		B7792B5C30630A4F00D486AE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7792B5B30630A4F00D486AE /* SwiftUI.framework */; };
+		B7792B6D30630A5000D486AE /* NotesyWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B7792B5730630A4F00D486AE /* NotesyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B7792B6B30630A5000D486AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7792B37306309C400D486AE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B7792B5630630A4F00D486AE;
+			remoteInfo = NotesyWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B7792B6E30630A5000D486AE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				B7792B6D30630A5000D486AE /* NotesyWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B7792B3F306309C400D486AE /* Notesy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notesy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7792B5730630A4F00D486AE /* NotesyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotesyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7792B5930630A4F00D486AE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		B7792B5B30630A4F00D486AE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		B7792B7730630D6900D486AE /* NotesyWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotesyWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B7792B7130630A5000D486AE /* Exceptions for "NotesyWidget" folder in "NotesyWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B7792B5630630A4F00D486AE /* NotesyWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B7792B41306309C400D486AE /* Notesy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Notesy;
+			sourceTree = "<group>";
+		};
+		B7792B5D30630A4F00D486AE /* NotesyWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B7792B7130630A5000D486AE /* Exceptions for "NotesyWidget" folder in "NotesyWidgetExtension" target */,
+			);
+			path = NotesyWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -24,13 +74,23 @@
 			files = (
 			);
 		};
+		B7792B5430630A4F00D486AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				B7792B5C30630A4F00D486AE /* SwiftUI.framework in Frameworks */,
+				B7792B5A30630A4F00D486AE /* WidgetKit.framework in Frameworks */,
+			);
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		B7792B36306309C400D486AE = {
 			isa = PBXGroup;
 			children = (
+				B7792B7730630D6900D486AE /* NotesyWidgetExtension.entitlements */,
 				B7792B41306309C400D486AE /* Notesy */,
+				B7792B5D30630A4F00D486AE /* NotesyWidget */,
+				B7792B5830630A4F00D486AE /* Frameworks */,
 				B7792B40306309C400D486AE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,8 +99,18 @@
 			isa = PBXGroup;
 			children = (
 				B7792B3F306309C400D486AE /* Notesy.app */,
+				B7792B5730630A4F00D486AE /* NotesyWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B7792B5830630A4F00D486AE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B7792B5930630A4F00D486AE /* WidgetKit.framework */,
+				B7792B5B30630A4F00D486AE /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -53,8 +123,12 @@
 				B7792B3B306309C400D486AE /* Sources */,
 				B7792B3C306309C400D486AE /* Frameworks */,
 				B7792B3D306309C400D486AE /* Resources */,
+				B7792B6E30630A5000D486AE /* Embed Foundation Extensions */,
 			);
 			buildRules = (
+			);
+			dependencies = (
+				B7792B6C30630A5000D486AE /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				B7792B41306309C400D486AE /* Notesy */,
@@ -63,6 +137,24 @@
 			productName = Notesy;
 			productReference = B7792B3F306309C400D486AE /* Notesy.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B7792B5630630A4F00D486AE /* NotesyWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B7792B7230630A5000D486AE /* Build configuration list for PBXNativeTarget "NotesyWidgetExtension" */;
+			buildPhases = (
+				B7792B5330630A4F00D486AE /* Sources */,
+				B7792B5430630A4F00D486AE /* Frameworks */,
+				B7792B5530630A4F00D486AE /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				B7792B5D30630A4F00D486AE /* NotesyWidget */,
+			);
+			name = NotesyWidgetExtension;
+			productName = NotesyWidgetExtension;
+			productReference = B7792B5730630A4F00D486AE /* NotesyWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -75,6 +167,9 @@
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					B7792B3E306309C400D486AE = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					B7792B5630630A4F00D486AE = {
 						CreatedOnToolsVersion = 27.0;
 					};
 				};
@@ -94,12 +189,18 @@
 			projectRoot = "";
 			targets = (
 				B7792B3E306309C400D486AE /* Notesy */,
+				B7792B5630630A4F00D486AE /* NotesyWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B7792B3D306309C400D486AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		B7792B5530630A4F00D486AE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -112,7 +213,20 @@
 			files = (
 			);
 		};
+		B7792B5330630A4F00D486AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B7792B6C30630A5000D486AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B7792B5630630A4F00D486AE /* NotesyWidgetExtension */;
+			targetProxy = B7792B6B30630A5000D486AE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B7792B48306309C500D486AE /* Debug configuration for PBXProject "Notesy" */ = {
@@ -241,6 +355,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Notesy/Notesy.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F888ZJ83BS;
@@ -258,6 +373,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = WideEye.Notesy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -273,6 +389,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Notesy/Notesy.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F888ZJ83BS;
@@ -290,9 +407,74 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = WideEye.Notesy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B7792B6F30630A5000D486AE /* Debug configuration for PBXNativeTarget "NotesyWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = NotesyWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F888ZJ83BS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotesyWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotesyWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = WideEye.Notesy.NotesyWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B7792B7030630A5000D486AE /* Release configuration for PBXNativeTarget "NotesyWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = NotesyWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F888ZJ83BS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotesyWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotesyWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = WideEye.Notesy.NotesyWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -316,6 +498,14 @@
 			buildConfigurations = (
 				B7792B4B306309C500D486AE /* Debug configuration for PBXNativeTarget "Notesy" */,
 				B7792B4C306309C500D486AE /* Release configuration for PBXNativeTarget "Notesy" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		B7792B7230630A5000D486AE /* Build configuration list for PBXNativeTarget "NotesyWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B7792B6F30630A5000D486AE /* Debug configuration for PBXNativeTarget "NotesyWidgetExtension" */,
+				B7792B7030630A5000D486AE /* Release configuration for PBXNativeTarget "NotesyWidgetExtension" */,
 			);
 			defaultConfigurationName = Release;
 		};
