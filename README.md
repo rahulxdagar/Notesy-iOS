@@ -10,7 +10,7 @@ This repository is intended to host the iOS implementation of Notesy, including 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/rahulxdagar/Notesy---iOS.git
+   git clone https://github.com/rahulxdagar/Notesy-iOS.git
    cd Notesy---iOS
    ```
 2. Open the project in Xcode.
