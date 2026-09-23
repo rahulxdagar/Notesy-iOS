@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var selectedTab = 0
     @State private var selectedNoteID: UUID?
     @State private var gradientRotation = 0.0
+    @Namespace private var containerNamespace
 
     var body: some View {
         ZStack {
@@ -16,7 +17,7 @@ struct ContentView: View {
                     switch selectedTab {
                     case 1: WidgetPickerView(dataManager: dataManager)
                     case 2: SettingsView(dataManager: dataManager)
-                    default: NotesView(dataManager: dataManager, selectedNoteID: $selectedNoteID)
+                    default: NotesView(dataManager: dataManager, selectedNoteID: $selectedNoteID, namespace: containerNamespace)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -38,6 +39,7 @@ struct ContentView: View {
 private struct NotesView: View {
     @ObservedObject var dataManager: NotesyDataManager
     @Binding var selectedNoteID: UUID?
+    var namespace: Namespace.ID
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -48,7 +50,11 @@ private struct NotesView: View {
                         .foregroundStyle(.white.opacity(0.68))
                 }
                 Spacer()
-                Button { selectedNoteID = dataManager.addNote() } label: {
+                Button {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        selectedNoteID = dataManager.addNote()
+                    }
+                } label: {
                     Image(systemName: "plus").font(.headline.bold()).frame(width: 44, height: 44)
                 }
                 .buttonStyle(.plain)
@@ -56,18 +62,27 @@ private struct NotesView: View {
             }
 
             ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                    ForEach(dataManager.notes) { note in
-                        NoteCard(note: note, isSelected: selectedNoteID == note.id, isWidgetNote: dataManager.selectedWidgetNoteID == note.id) {
-                            selectedNoteID = note.id
-                        } delete: {
-                            dataManager.deleteNote(id: note.id)
-                            if selectedNoteID == note.id { selectedNoteID = dataManager.notes.first?.id }
+                GlassEffectContainer(spacing: 24) {
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                        ForEach(dataManager.notes) { note in
+                            NoteCard(note: note, isSelected: selectedNoteID == note.id, isWidgetNote: dataManager.selectedWidgetNoteID == note.id) {
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                    selectedNoteID = note.id
+                                }
+                            } delete: {
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                    dataManager.deleteNote(id: note.id)
+                                    if selectedNoteID == note.id { selectedNoteID = dataManager.notes.first?.id }
+                                }
+                            }
+                            .glassEffectID(note.id, in: namespace)
+                            .transition(.blurReplace.combined(with: .scale))
                         }
                     }
                 }
             }
             .scrollIndicators(.hidden)
+            .animation(.spring(response: 0.5, dampingFraction: 0.8), value: dataManager.notes)
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 22)
@@ -107,9 +122,10 @@ private struct NoteCard: View {
             .padding(14)
         }
         .buttonStyle(.plain)
-        .liquidGlass()
+        .liquidGlass() // Now maps to .glassEffect
         .aspectRatio(1, contentMode: .fit)
         .opacity(isSelected ? 1 : 0.8)
+        .scaleEffect(isSelected ? 1.02 : 1.0)
         .contextMenu {
             Button(role: .destructive, action: delete) { Label("Delete Note", systemImage: "trash") }
         }
@@ -132,7 +148,7 @@ struct NoteEditor: View {
                 VStack(spacing: 0) {
                     TextField("Note title", text: Binding(
                         get: { currentNote.title },
-                        set: { dataManager.updateNote(id: note.id, title: $0) }
+                        set: { value in dataManager.updateNote(id: note.id, title: value) }
                     ))
                     .font(.title3.bold())
                     .textFieldStyle(.plain)
@@ -140,7 +156,7 @@ struct NoteEditor: View {
 
                     TextEditor(text: Binding(
                         get: { currentNote.text },
-                        set: { dataManager.updateNote(id: note.id, text: $0) }
+                        set: { value in dataManager.updateNote(id: note.id, text: value) }
                     ))
                     .scrollContentBackground(.hidden)
                     .foregroundStyle(.white)
@@ -167,7 +183,7 @@ struct NoteEditor: View {
                         Button("24 pt") { dataManager.updateFormatting(id: note.id, fontSize: 24) }
                         Button("32 pt") { dataManager.updateFormatting(id: note.id, fontSize: 32) }
                     } label: { Label("Size", systemImage: "textformat") }
-                    Button { dataManager.updateFormatting(id: note.id, isBold: !currentNote.isBold) } label: {
+                    Button { dataManager.updateFormatting(id: note.id, isBold: !currentNote.isBold) } label: { // fixed typo in below lines?
                         Image(systemName: "bold").foregroundStyle(currentNote.isBold ? .yellow : .white)
                     }
                     Button { dataManager.updateFormatting(id: note.id, isItalic: !currentNote.isItalic) } label: {
@@ -193,7 +209,7 @@ private struct WidgetPickerView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("Displayed note").font(.caption.weight(.semibold)).foregroundStyle(.white.opacity(0.62))
-                Picker("Displayed note", selection: Binding(get: { dataManager.selectedWidgetNoteID }, set: { dataManager.selectWidgetNote($0) })) {
+                Picker("Displayed note", selection: Binding(get: { dataManager.selectedWidgetNoteID }, set: { value in dataManager.selectWidgetNote(value) })) {
                     ForEach(dataManager.notes) { note in
                         Text(note.title.isEmpty ? "Untitled note" : note.title).tag(note.id)
                     }
@@ -212,6 +228,8 @@ private struct WidgetPickerView: View {
                         .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
                 }
                 .padding(18)
+                .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+                .id(note.id) // trigger animation on change
                 .liquidGlass()
             }
             Spacer()
@@ -219,6 +237,7 @@ private struct WidgetPickerView: View {
         .foregroundStyle(.white)
         .padding(.horizontal, 22)
         .padding(.top, 20)
+        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: dataManager.selectedWidgetNoteID)
     }
 }
 
@@ -231,7 +250,9 @@ private struct SettingsView: View {
             Text("Make Notesy feel like yours.").foregroundStyle(.white.opacity(0.68))
             VStack(alignment: .leading, spacing: 12) {
                 Text("Theme").font(.headline)
-                Picker("Theme", selection: Binding(get: { dataManager.theme }, set: { dataManager.setTheme($0) })) {
+                Picker("Theme", selection: Binding(get: { dataManager.theme }, set: { value in
+                    withAnimation(.easeInOut(duration: 0.4)) { dataManager.setTheme(value) }
+                })) {
                     ForEach(NotesyTheme.allCases) { theme in Text(theme.title).tag(theme) }
                 }
                 .pickerStyle(.segmented)
@@ -263,35 +284,52 @@ private struct SettingsView: View {
 private struct GlassTabBar: View {
     @Binding var selection: Int
     private let tabs = [("note.text", "Notes"), ("widget.small", "Widget"), ("slider.horizontal.3", "Settings")]
+    private let selectedColors: [Color] = [.cyan, .mint, .orange]
+    @Namespace private var namespace
 
     var body: some View {
         GlassEffectContainer(spacing: 8) {
             HStack(spacing: 8) {
                 ForEach(tabs.indices, id: \.self) { index in
                     Button {
-                        withAnimation(.smooth(duration: 0.25)) { selection = index }
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                            selection = index
+                        }
                     } label: {
                         VStack(spacing: 5) {
                             Image(systemName: tabs[index].0)
-                            Text(tabs[index].1).font(.caption2.weight(.semibold))
+                                .font(.title3.weight(.bold))
+                                .foregroundStyle(selection == index ? selectedColors[index] : .white.opacity(0.78))
+                                .shadow(color: selection == index ? selectedColors[index].opacity(0.45) : .clear, radius: 8)
+                            Text(tabs[index].1).font(.caption2.weight(.bold))
+                                .foregroundStyle(.white.opacity(selection == index ? 1 : 0.78))
                         }
-                        .foregroundStyle(selection == index ? .white : .white.opacity(0.5))
+                        .scaleEffect(selection == index ? 1.08 : 1)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .background(selection == index ? .white.opacity(0.18) : .clear, in: Capsule())
+                        .background {
+                            if selection == index {
+                                Color.clear
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .glassEffect(.regular.tint(.white.opacity(0.08)).interactive(), in: Capsule())
+                                    .glassEffectID("selectedTab", in: namespace)
+                                    .glassEffectTransition(.matchedGeometry)
+                                    .matchedGeometryEffect(id: "selectedTabPosition", in: namespace)
+                            }
+                        }
                     }
                     .buttonStyle(.plain)
                 }
             }
             .padding(6)
         }
-        .glassEffect(.regular.interactive(), in: Capsule())
+        .animation(.spring(response: 0.45, dampingFraction: 0.72), value: selection)
+        .padding(4)
+        .background(.ultraThinMaterial.opacity(0.28), in: Capsule())
+        .overlay(Capsule().stroke(.white.opacity(0.08), lineWidth: 0.5))
+        .shadow(color: .black.opacity(0.12), radius: 16, y: 8)
         .frame(maxWidth: 520)
     }
-}
-
-#Preview {
-    ContentView()
 }
 
 #Preview {
